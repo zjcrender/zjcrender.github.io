@@ -1,132 +1,74 @@
-$(function () {
+function scrollToElement(target, offset) {
+  var scroll_offset = $(target).offset();
+  $("body,html").animate({
+    scrollTop: scroll_offset.top + (offset || 0),
+    easing: 'swing'
+  })
+}
 
-	$('.post__main img').on('click', function () {
-		var $img = $(this);
+function scrollToBoard() {
+  scrollToElement('#board', -$("#navbar").height());
+}
 
-		$.fancybox.open([{
-			src: $img.attr('src'),
-			type: 'image'
-		}]);
-	});
+$(document).ready(function () {
+  // 顶部菜单的动效
+  var navbar = $("#navbar");
+  if (navbar.offset().top > 0) {
+    navbar.addClass("navbar-custom");
+    navbar.removeClass("navbar-dark");
+  }
+  $(window).scroll(function () {
+    if (navbar.offset().top > 0) {
+      navbar.addClass("navbar-custom");
+      navbar.removeClass("navbar-dark");
+    } else {
+      navbar.addClass("navbar-dark");
+    }
+  });
+  $('#navbar-toggler-btn').on('click', function () {
+    $('.animated-icon').toggleClass('open');
+    $('#navbar').toggleClass('navbar-col-show');
+  });
 
-	$('[data-fancybox]').fancybox({
-		// closeClickOutside: false, 
-		image: {
-			protect: true
-		}
-	});
+  // 向下滚动箭头的点击
+  $(".scroll-down-bar").on("click", scrollToBoard);
 
-	// key bind
+  // 向顶部滚动箭头
+  var topArrow = $("#scroll-top-button");
+  var posDisplay = false;
+  var scrollDisplay = false;
+  // 位置
+  var setTopArrowPos = function () {
+    var boardRight = document.getElementById('board').getClientRects()[0].right;
+    var bodyWidth = document.body.offsetWidth;
+    var right = bodyWidth - boardRight;
+    posDisplay = right >= 50;
+    topArrow.css({
+      "bottom": posDisplay && scrollDisplay ? "20px" : "-60px",
+      "right": right - 64 + "px"
+    });
+  };
+  setTopArrowPos();
+  $(window).resize(setTopArrowPos);
+  // 显示
+  var headerHeight = $("#board").offset().top;
+  $(window).scroll(function () {
+    var scrollHeight = document.body.scrollTop + document.documentElement.scrollTop;
+    scrollDisplay = scrollHeight >= headerHeight;
+    topArrow.css({
+      "bottom": posDisplay && scrollDisplay ? "20px" : "-60px"
+    });
+  });
+  // 点击
+  topArrow.on("click", function () {
+    $("body,html").animate({
+      scrollTop: 0,
+      easing: 'swing'
+    })
+  });
 
-	// j  down
-	// k  top
-	// t  page top
-	// b  page bottom
-
-	// i  go index
-	var $body = $('html');
-
-	var isKeydown = false;
-	$body.on('keydown', function (e) {
-		// console.log(e.which, 'key down');
-
-		switch (e.which) {
-			case 74: // j down
-				if (!isKeydown) {
-					isKeydown = true;
-					requestAnimationFrame(function animate() {
-						var curTop = window.scrollY;
-						window.scrollTo(0, curTop + 15);
-
-						if (isKeydown) {
-							requestAnimationFrame(animate);
-						}
-					});
-				}
-
-				break;
-
-			case 75: // k up
-				if (!isKeydown) {
-					isKeydown = true;
-					requestAnimationFrame(function animate() {
-						var curTop = window.scrollY;
-						window.scrollTo(0, curTop - 15);
-
-						if (isKeydown) {
-							requestAnimationFrame(animate);
-						}
-					});
-				}
-
-				break;
-
-			case 191: // shift + / = ? show help modal
-				break;
-
-				// 16 shift
-			case 84: // t
-				window.scrollToTop(1);
-				break;
-
-			case 66: // b
-				window.scrollToBottom();
-				break;
-
-			case 78: // n half
-				window.scrollPageDown(1);
-				break;
-
-			case 77: // m
-				window.scrollPageUp(1);
-				break;
-		}
-
-	});
-
-	$body.on('keyup', function (e) {
-		isKeydown = false;
-	});
-
-	// print hint
-
-	var comments = [
-		'',
-		'                    .::::.            快捷键：',
-		'                  .::::::::.            j：下移',
-		'                 :::::::::::            k：上移',
-		"             ..:::::::::::'             t：移到最顶",
-		"           '::::::::::::'               b：移到最底",
-		'             .::::::::::                n：下移很多',
-		"        '::::::::::::::..               m：上移很多",
-		'             ..::::::::::::.',
-		'           ``::::::::::::::::',
-		"            ::::``:::::::::'        .:::.",
-		"           ::::'   ':::::'       .::::::::.",
-		"         .::::'      ::::     .:::::::'::::.",
-		"        .:::'       :::::  .::::::::'  ':::::.",
-		"       .::'        :::::::::::::::'      ':::::.",
-		"      .::'        :::::::::::::::'          ':::.",
-		"  ...:::          :::::::::::::'              ``::.",
-		" ```` ':.         '::::::::::'                  ::::..",
-		"                    ':::::'                    ':'````..",
-		''
-	];
-
-	comments.forEach(function (item) {
-		console.log('%c' + item, 'color: #399c9c');
-	});
-
-	$('.btn-reward').on('click', function (e) {
-		e.preventDefault();
-
-		var $reward = $('.reward-wrapper');
-		$reward.slideToggle();
-	});
-
-	$('body').addClass('queue-in');
-	setTimeout(function() {
-		$('body').css({ opacity: 1}).removeClass('queue-in');
-	}, 500);
-
+  // 因兼容问题，在 iOS 和 Safari 环境下不使用固定 Banner
+  if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent) || (/Safari/i.test(navigator.userAgent) && !/Chrome/i.test(navigator.userAgent))) {
+    $("#background").css("background-attachment", "scroll");
+  }
 });
