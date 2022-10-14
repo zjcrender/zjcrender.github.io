@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>users on Blowfish</title>
+    <link>https://blog.render.ink/tags/users/</link>
+    <description>Recent content in users on Blowfish</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 14 Aug 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://blog.render.ink/tags/users/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Users</title>
+      <link>https://blog.render.ink/users/</link>
+      <pubDate>Fri, 14 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.render.ink/users/</guid>
+      <description>Real websites that are built with Blowfish. Website Author Details nunocoracao.com Nuno Coração Personal site - Theme author code-chimp.com Timothy Goshinski Personal site mucahitkurtlar.github.io Mücahit Kurtlar Personal site brendanwallace.github.io Brendan Wallace Personal site www.</description>
+    </item>
+    
+  </channel>
+</rss>
